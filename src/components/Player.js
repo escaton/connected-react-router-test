@@ -1,28 +1,46 @@
-import { useEffect } from "react";
-import { connect } from "react-redux";
-import { useLocation } from "react-router-dom";
+import React from 'react';
+import { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
-const fib = function (n) {
-  return n === undefined
-    ? 0
-    : n === 0
-    ? 0
-    : n === 1
-    ? 1
-    : fib(n - 1) + fib(n - 2);
+export const _Player = ({ type, route, trigger }) => {
+    useEffect(() => {
+        console.log('player render');
+    });
+    const location = useLocation();
+    useEffect(() => {
+        if (!route.includes(type)) {
+            console.log(
+                'type and route mismatch',
+                type,
+                route,
+                location.pathname
+            );
+        }
+    });
+
+    return (
+        <div
+            onClick={() => {
+                setTimeout(() => {
+                    trigger();
+                }, 0);
+            }}
+        >
+            {type} {route}
+        </div>
+    );
 };
 
-export const _Player = ({ type, route }) => {
-  const location = useLocation();
-  useEffect(() => {
-    if (!route.includes(type)) {
-      console.log("type and route mismatch", type, route, location.pathname);
+export const Player = connect(
+    (state) => {
+        console.log('mapStateToProp executed');
+        return {
+            route: state.router.location.pathname,
+            unstableProp: {},
+        };
+    },
+    {
+        trigger: () => ({ type: 'trigger' }),
     }
-  });
-
-  return `${type} ${route} ` + fib(30);
-};
-
-export const Player = connect((state) => ({
-  route: state.router.location.pathname
-}))(_Player);
+)(_Player);

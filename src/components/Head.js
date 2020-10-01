@@ -11,10 +11,10 @@ const NavLink = (props) => {
       onClick={(e) => {
         e.preventDefault();
         setTimeout(() => {
-          unstable_batchedUpdates(() => {
+          // unstable_batchedUpdates(() => {
             history.push(props.to);
-          });
-        }, 0);
+          // });
+        }, 1000);
       }}
     >
       {props.children}
